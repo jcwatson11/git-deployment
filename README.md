@@ -156,3 +156,4 @@ If you do decide to contribute to this package, please submit a pull request fro
 
 This project's branch stragegy is that master contains the latest development stream. Release branches are branched directly from master. Tags are tagged from their respective feature branches.
 
+# Happy Coding!
