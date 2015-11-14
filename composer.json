@@ -1,6 +1,6 @@
 {
     "name": "fh/git-deployment",
-    "description": "Server side deployment hooks for FH projects.",
+    "description": "Server side gitolite post-receive deployment hooks for git projects.",
     "require": {
         "naneau/semver": "dev-master#c771ad1e6c89064c0a4fa714979639dc3649d6c8"
     },
