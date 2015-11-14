@@ -1,0 +1,25 @@
+{
+    "name": "fh/git-deployment",
+    "description": "Server side deployment hooks for FH projects.",
+    "require": {
+        "naneau/semver": "dev-master#c771ad1e6c89064c0a4fa714979639dc3649d6c8"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jon Watson",
+            "email": "jwatson@fh.org"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "4.8.*",
+        "mockery/mockery": "0.9.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "": ["src/", "tests/"]
+        }
+    },
+    "bin": ["index.php"],
+    "minimum-stability": "stable"
+}

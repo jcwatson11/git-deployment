@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="phpunit_bootstrap.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="false"
+>
+    <testsuites>
+        <testsuite name="main">
+            <directory suffix=".php">./tests</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="DEPLOYMENT_LEVEL" value="beta" />
+        <env name="DEPLOYMENT_TARGET_DIR" value="/var/www/test.fh.org" />
+        <env name="DEPLOYMENT_REMOTE_NAME" value="beta" />
+        <env name="GIT_DIR" value="/var/www/test.fh.org" />
+        <env name="GIT_WORK_TREE" value="/var/www/test.fh.org" />
+        <env name="LOCALLY_MODIFIED_FILE_STRATEGY" value="Fh\Git\Deployment\Strategies\ResetLocallyModifiedFileStrategy" />
+        <env name="TAG_STRATEGY" value="Fh\Git\Deployment\Strategies\AutoIncrementingTagStrategy" />
+        <env name="DEPLOYMENT_STRATEGY" value="Fh\Git\Deployment\Strategies\DefaultDeploymentStrategy" />
+        <env name="POST_DEPLOYMENT_SCRIPT" value="./deploy.sh" />
+    </php>
+</phpunit>
