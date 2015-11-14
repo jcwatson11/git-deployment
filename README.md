@@ -63,7 +63,6 @@ LOCALLY_MODIFIED_FILE_STRATEGY="Fh\\Git\\Deployment\\Strategies\\ResetLocallyMod
 DEPLOYMENT_STRATEGY="Fh\\Git\\Deployment\\Strategies\\DefaultDeploymentStrategy"
 TAG_STRATEGY="Fh\\Git\\Deployment\\Strategies\\AutoIncrementTagStrategy"
 POST_DEPLOYMENT_SCRIPT="./deploy.sh"
-DEPLOYMENT_TESTING=1
 
 dep=`which git-deployment`
 
