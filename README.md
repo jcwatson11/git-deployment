@@ -26,7 +26,7 @@ All commands executed, and their output are echoed to standard out, which means 
 
 ## Getting started with default features
 
-It is recommended that you install the git-deployment.phar executable globally there are two ways to do this:
+It is recommended that you install the git-deployment.phar executable globally. There are two ways to do this:
 
 ### Quick start
 
