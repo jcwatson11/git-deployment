@@ -18,7 +18,7 @@ This project defines a PHP executable PHAR file that is spawned by the post-rece
 
 When your gitolite server receives a push to your project, the post-receive hook will execute with commit ID's and a human readable "ref" as parameters. The ref is something like refs/heads/branchname, or refs/tags/tagname.
 
-The default deployment strategy will not deploy any ref that does not conform to SemVer naming standards. An example of a ref that does conform to SemVer naming standards would be something like: 3.0, or 3.0.1. If you would like to deploy a non-SemVer branch or tag name, you will need to create a new strategy. See [customizing](#Customization_of_behaviors).
+The default deployment strategy will not deploy any ref that does not conform to SemVer naming standards. An example of a ref that does conform to SemVer naming standards would be something like: 3.0, or 3.0.1. If you would like to deploy a non-SemVer branch or tag name, you will need to create a new strategy. See [customizing](#markdown-header-customization-of-behaviors).
 
 Once a push is received and the hook spawns git-deployment, this package goes to work by reading the environment variables for configuration details and target directory, and follows the configured strategies for deployment behavior.
 
@@ -146,7 +146,7 @@ This allows you quick, easy access to make changes, run unit tests, and re-deplo
 
 # Contributing
 
-See [Customization of behaviors](#Customization_of_behaviors) for guidance on deciding whether to contribute to this package or fork your own.
+See [Customization of behaviors](#markdown-header-customization-of-behaviors) for guidance on deciding whether to contribute to this package or fork your own.
 
 If you do decide to contribute to this package, please submit a pull request from a feature branch to the master branch.
 
