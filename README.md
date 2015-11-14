@@ -12,6 +12,8 @@ This package provides a hightly customizable PHP based deployment process intend
 
 This project assumes that you already have [gitolite](http://gitolite.com/gitolite/index.html) installed, and that you are somewhat familar with how to use a server-side git hook, specifically the post-receive hook. If your are not familiar with gitolite, please read their documentation and work through some of their examples. Set up a gitolite server for yourself and push to it from your repository to see how it works.
 
+It is also helpful if you are familiar with [phar-composer](https://github.com/clue/phar-composer), and how phar files work in general. Though, this knowledge is not required.
+
 ## Process Overview
 
 This project defines a PHP executable PHAR file that is spawned by the post-receive gitolite hook. An example post-receive hook file is defined below.
