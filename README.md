@@ -131,18 +131,6 @@ If you are making customizatoins regularly, once you understand how this process
 
 See the [fh/git-hooks](https://bitbucket.org/jon_watson/fh-git-hooks) project for further instructions on how to use it.
 
-```sh
-# Log in as the gitolite user
-$ git clone git@bitbucket.org:/fhcode/hook-example.git
-$ git clone git@bitbucket.org:/fhcode/fh-git-deployment.git
-$ cd fh-git-deployment
-$ # make customizations to your git-deployment strategies
-$ cd ../hook-example
-$ # make customizations to the Makefile and the post-receive hook for my project
-$ make all
-$ make install
-```
-
 This allows you quick, easy access to make changes, run unit tests, and re-deploy the git-deployment.phar and post-receive hook to your system with your recent customizations.
 
 # Contributing
