@@ -108,6 +108,8 @@ class AutoIncrementingTagStrategyTest extends PHPUnit_Framework_TestCase {
           ->andReturn("\n");
         $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. push origin 3.0.1')
           ->andReturn("\n");
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. checkout 3.0.1')
+          ->andReturn("\n");
 
         ob_start();
         $s = $d->getTagStrategy();
@@ -125,6 +127,9 @@ class AutoIncrementingTagStrategyTest extends PHPUnit_Framework_TestCase {
         $expected .= "\n";
         $expected .= "\n";
         $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. push origin 3.0.1\n";
+        $expected .= "\n";
+        $expected .= "\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. checkout 3.0.1\n";
         $expected .= "\n";
         $expected .= "\n";
         $this->assertEquals('3.0.1',$version.'');
