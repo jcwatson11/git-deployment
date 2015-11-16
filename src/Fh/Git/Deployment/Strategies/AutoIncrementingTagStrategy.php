@@ -76,6 +76,7 @@ class AutoIncrementingTagStrategy implements TagStrategyInterface {
         if(!$deploy->isTag($deploy->ref)) {
             $deploy->out("Tagging work area with tag: $version");
             $deploy->out($deploy->git("tag $version"));
+            $deploy->out($deploy->git("push origin $version"));
         } else {
             $deploy->out("No new tag will be created because you are pushing a tag.");
         }

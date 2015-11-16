@@ -18,7 +18,9 @@ class DefaultDeploymentStrategy implements DeploymentStrategyInterface {
      */
     public function deploy(Deploy $deploy, Version $version) {
         $remote = $deploy->config['deployment_remote_name'];
+        $deploy->out($deploy->git("fetch beta"));
         if($deploy->isBranch($deploy->ref)) {
+            $deploy->out("Deleting local copy of your branch just to avoid any potential merge conflicts.");
             $deploy->out($deploy->git("branch -D {$deploy->baseref}"));
             $ref = "$remote/{$deploy->baseref}";
         } else {
@@ -28,6 +30,8 @@ class DefaultDeploymentStrategy implements DeploymentStrategyInterface {
         $deploy->out($deploy->git("checkout $ref"));
         if($deploy->isBranch($deploy->ref)) {
             $deploy->out($deploy->git("checkout -b {$deploy->baseref}"));
+            $deploy->out("Pushing your branch to origin just in case you forgot to do that first.");
+            $deploy->out($deploy->git("push origin {$deploy->baseref}"));
         }
         return true;
     }
@@ -76,7 +80,7 @@ class DefaultDeploymentStrategy implements DeploymentStrategyInterface {
      * @return boolean
      */
     public function fileExists(Deploy $deploy, $strPath) {
-        $out = $deploy->command("[[ -f $strPath ]] && ls $strPath");
+        $out = $deploy->command("[ -f $strPath ] && ls $strPath");
         return ($out) ? TRUE:FALSE;
     }
 }

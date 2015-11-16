@@ -69,16 +69,16 @@ class DeployTest extends PHPUnit_Framework_TestCase {
 
     public function test_it_can_fetch_origin() {
         $d = $this->newDeploy();
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. fetch origin')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch origin')
           ->andReturn("\n");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. fetch origin --tags')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch origin --tags')
           ->andReturn("\n");
         ob_start();
         echo $d->fetchOrigin();
         $out = ob_get_contents();
         ob_end_clean();
-        $expected = "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. fetch origin\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. fetch origin --tags\n";
+        $expected = "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch origin\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch origin --tags\n";
         $expected .= "\n\n";
         $this->assertEquals($expected,$out);
     }
@@ -97,9 +97,9 @@ class DeployTest extends PHPUnit_Framework_TestCase {
 
     public function test_it_can_tell_when_a_remote_exists() {
         $d = $this->newDeploy();
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. remote | egrep "^beta$" | tail -1')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. remote | egrep "^beta$" | tail -1')
           ->andReturn('beta');
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. remote | egrep "^stage$" | tail -1')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. remote | egrep "^stage$" | tail -1')
           ->andReturn('');
 
         $expected = true;
@@ -108,7 +108,7 @@ class DeployTest extends PHPUnit_Framework_TestCase {
         $out = ob_get_contents();
         ob_end_clean();
         $this->assertEquals($expected, $actual);
-        $expected = "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. remote | egrep \"^beta$\" | tail -1\n";
+        $expected = "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. remote | egrep \"^beta$\" | tail -1\n";
         $this->assertEquals($expected, $out);
 
         $expected = false;
@@ -117,7 +117,7 @@ class DeployTest extends PHPUnit_Framework_TestCase {
         $out = ob_get_contents();
         ob_end_clean();
         $this->assertEquals($expected, $actual);
-        $expected = "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. remote | egrep \"^stage$\" | tail -1\n";
+        $expected = "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. remote | egrep \"^stage$\" | tail -1\n";
         $this->assertEquals($expected, $out);
     }
 

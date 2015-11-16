@@ -18,21 +18,23 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
 
     public function test_it_can_deploy_a_tag() {
         $d = $this->newDeploy();
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. fetch origin')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch origin')
           ->andReturn("\n");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. fetch origin --tags')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch beta')
           ->andReturn("\n");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. ls-files -m')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch origin --tags')
+          ->andReturn("\n");
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. ls-files -m')
           ->andReturn("files");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. reset --hard')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. reset --hard')
           ->andReturn("");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. checkout 3.0.0')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. checkout 3.0.0')
           ->andReturn("\n");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. tag 3.0.0')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. tag 3.0.0')
           ->andReturn("\n");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. remote | egrep "^beta$" | tail -1')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. remote | egrep "^beta$" | tail -1')
           ->andReturn('beta');
-        $d->expectCommand('[[ -f /var/www/test.fh.org/./deploy.sh ]] && ls /var/www/test.fh.org/./deploy.sh')
+        $d->expectCommand('[ -f /var/www/test.fh.org/./deploy.sh ] && ls /var/www/test.fh.org/./deploy.sh')
           ->andReturn('deploy.sh');
         $d->expectCommand('cd /var/www/test.fh.org')
           ->andReturn("\n");
@@ -48,17 +50,17 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
         $expected = "WARNING: You are in test mode. No deployment will actually take place.\n";
         $expected .= "INPUT oldrev: hash1, newrev: hash2, ref: refs/tags/3.0.0\n";
         $expected .= "Checking to make sure the beta remote exists in the target work area.\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. remote | egrep \"^beta$\" | tail -1\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. remote | egrep \"^beta$\" | tail -1\n";
         $expected .= "It exists. So we're ok.\n";
         $expected .= "Preparing to deal with locally modified files if there are any.\n";
         $expected .= "Following strategy: Fh\Git\Deployment\Strategies\ResetLocallyModifiedFileStrategy\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. ls-files -m\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. ls-files -m\n";
         $expected .= "Found locally modified files. Running git reset --hard\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. reset --hard\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. reset --hard\n";
         $expected .= "\n"; // Empty output from git command
         $expected .= "Bringing the work area up to date with origin.\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. fetch origin\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. fetch origin --tags\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch origin\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch origin --tags\n";
         $expected .= "\n"; // Empty output from git command
         $expected .= "\n"; // Empty output from git command
         $expected .= "Preparing tag strategy.\n";
@@ -67,13 +69,16 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
         $expected .= "No new tag will be created.\n";
         $expected .= "Deploying the tag you pushed (3.0.0) to work area /var/www/test.fh.org.\n";
         $expected .= "Following strategy: Fh\Git\Deployment\Strategies\DefaultDeploymentStrategy\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch beta\n";
+        $expected .= "\n"; // Empty output from git command
+        $expected .= "\n"; // Empty output from git command
         $expected .= "Checking out 3.0.0\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. checkout 3.0.0\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. checkout 3.0.0\n";
         $expected .= "\n"; // Empty output from git command
         $expected .= "\n"; // Empty output from git command
         $expected .= "No new tag will be created because you are pushing a tag.\n";
         $expected .= "Running post-deployment script in work area.\n";
-        $expected .= "command: [[ -f /var/www/test.fh.org/./deploy.sh ]] && ls /var/www/test.fh.org/./deploy.sh\n";
+        $expected .= "command: [ -f /var/www/test.fh.org/./deploy.sh ] && ls /var/www/test.fh.org/./deploy.sh\n";
         $expected .= "command: cd /var/www/test.fh.org\n";
         $expected .= "\n";
         $expected .= "\n";
@@ -90,31 +95,37 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
     public function test_it_can_deploy_a_branch() {
         $this->config['testing'] = true;
         $d = new Deploy($this->config,"hash1","hash2","refs/heads/3.0");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. fetch origin')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch origin')
           ->andReturn("\n");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. fetch origin --tags')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch beta')
           ->andReturn("\n");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. ls-files -m')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch origin --tags')
+          ->andReturn("\n");
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. ls-files -m')
           ->andReturn("files");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. reset --hard')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. reset --hard')
           ->andReturn("");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. checkout 3.0.0')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. checkout 3.0.0')
           ->andReturn("\n");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. tag 3.0.0')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. tag 3.0.0')
           ->andReturn("\n");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. remote | egrep "^beta$" | tail -1')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. remote | egrep "^beta$" | tail -1')
           ->andReturn('beta');
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. tag | grep -E -i "^3.0\.[0-9]\.[0-9]+-beta\.[0-9]+$" | sort -V | tail -1')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. tag | grep -E -i "^3.0\.[0-9]\.[0-9]+-beta\.[0-9]+$" | sort -V | tail -1')
           ->andReturn('3.0.0-beta.2');
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. branch -D 3.0')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. branch -D 3.0')
           ->andReturn("\n");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. checkout beta/3.0')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. checkout beta/3.0')
           ->andReturn("\n");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. checkout -b 3.0')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. checkout -b 3.0')
           ->andReturn("\n");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. tag 3.0.0-beta.3')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. push origin 3.0')
           ->andReturn("\n");
-        $d->expectCommand('[[ -f /var/www/test.fh.org/./deploy.sh ]] && ls /var/www/test.fh.org/./deploy.sh')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. tag 3.0.0-beta.3')
+          ->andReturn("\n");
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. push origin 3.0.0-beta.3')
+          ->andReturn("\n");
+        $d->expectCommand('[ -f /var/www/test.fh.org/./deploy.sh ] && ls /var/www/test.fh.org/./deploy.sh')
           ->andReturn('deploy.sh');
         $d->expectCommand('cd /var/www/test.fh.org')
           ->andReturn("\n");
@@ -130,42 +141,53 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
         $expected = "WARNING: You are in test mode. No deployment will actually take place.\n";
         $expected .= "INPUT oldrev: hash1, newrev: hash2, ref: refs/heads/3.0\n";
         $expected .= "Checking to make sure the beta remote exists in the target work area.\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. remote | egrep \"^beta$\" | tail -1\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. remote | egrep \"^beta$\" | tail -1\n";
         $expected .= "It exists. So we're ok.\n";
         $expected .= "Preparing to deal with locally modified files if there are any.\n";
         $expected .= "Following strategy: Fh\Git\Deployment\Strategies\ResetLocallyModifiedFileStrategy\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. ls-files -m\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. ls-files -m\n";
         $expected .= "Found locally modified files. Running git reset --hard\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. reset --hard\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. reset --hard\n";
         $expected .= "\n"; // Empty output from git command
         $expected .= "Bringing the work area up to date with origin.\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. fetch origin\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. fetch origin --tags\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch origin\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch origin --tags\n";
         $expected .= "\n"; // Empty output from git command
         $expected .= "\n"; // Empty output from git command
         $expected .= "Preparing tag strategy.\n";
         $expected .= "Following strategy: Fh\Git\Deployment\Strategies\AutoIncrementingTagStrategy\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. tag | grep -E -i \"^3.0\.[0-9]\.[0-9]+-beta\.[0-9]+\$\" | sort -V | tail -1\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. tag | grep -E -i \"^3.0\.[0-9]\.[0-9]+-beta\.[0-9]+\$\" | sort -V | tail -1\n";
         $expected .= "Previous latest tag was 3.0.0-beta.2\n";
         $expected .= "Next tag to be used: 3.0.0-beta.3\n";
         $expected .= "Deploying the branch you pushed (3.0) to work area /var/www/test.fh.org.\n";
         $expected .= "Following strategy: Fh\Git\Deployment\Strategies\DefaultDeploymentStrategy\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. branch -D 3.0\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch beta\n";
+        $expected .= "\n"; // Empty output from git command
+        $expected .= "\n"; // Empty output from git command
+        $expected .= "Deleting local copy of your branch just to avoid any potential merge conflicts.\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. branch -D 3.0\n";
         $expected .= "\n"; // Empty output from git command
         $expected .= "\n"; // Empty output from git command
         $expected .= "Checking out beta/3.0\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. checkout beta/3.0\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. checkout beta/3.0\n";
         $expected .= "\n"; // Empty output from git command
         $expected .= "\n"; // Empty output from git command
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. checkout -b 3.0\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. checkout -b 3.0\n";
         $expected .= "\n"; // Empty output from git command
         $expected .= "\n"; // Empty output from git command
+        $expected .= "Pushing your branch to origin just in case you forgot to do that first.\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. push origin 3.0\n";
+        $expected .= "\n";
+        $expected .= "\n";
         $expected .= "Tagging work area with tag: 3.0.0-beta.3\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. tag 3.0.0-beta.3\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. tag 3.0.0-beta.3\n";
+        $expected .= "\n";
+        $expected .= "\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. push origin 3.0.0-beta.3\n";
         $expected .= "\n"; // Empty output from git command
         $expected .= "\n"; // Empty output from git command
         $expected .= "Running post-deployment script in work area.\n";
-        $expected .= "command: [[ -f /var/www/test.fh.org/./deploy.sh ]] && ls /var/www/test.fh.org/./deploy.sh\n";
+        $expected .= "command: [ -f /var/www/test.fh.org/./deploy.sh ] && ls /var/www/test.fh.org/./deploy.sh\n";
         $expected .= "command: cd /var/www/test.fh.org\n";
         $expected .= "\n";
         $expected .= "\n";

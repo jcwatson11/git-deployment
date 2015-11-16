@@ -159,7 +159,7 @@ class Deploy extends CommandRunner {
      * @return boolean
      */
     public function remoteExists($remoteName) {
-        $response = $this->git("remote | egrep \"^$remoteName$\" | tail -1");
+        $response = trim($this->git("remote | egrep \"^$remoteName$\" | tail -1"));
         return ($response == $remoteName);
     }
 

@@ -19,9 +19,9 @@ class ResetLocallyModifiedFileStrategyTest extends PHPUnit_Framework_TestCase {
 
     public function test_it_resets_hard_when_locally_modified_files_are_found_during_preDeploy() {
         $d = $this->newDeploy();
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. ls-files -m')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. ls-files -m')
           ->andReturn("composer.json\ncomposer.lock");
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. reset --hard')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. reset --hard')
           ->andReturn("\n");
 
         ob_start();
@@ -31,9 +31,9 @@ class ResetLocallyModifiedFileStrategyTest extends PHPUnit_Framework_TestCase {
         ob_end_clean();
 
         $expected = "Following strategy: Fh\Git\Deployment\Strategies\ResetLocallyModifiedFileStrategy\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. ls-files -m\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. ls-files -m\n";
         $expected .= "Found locally modified files. Running git reset --hard\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree/var/www/test.fh.org/. reset --hard\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. reset --hard\n";
         $expected .= "\n";
         $expected .= "\n";
         $this->assertEquals($expected, $out);
