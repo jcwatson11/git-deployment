@@ -8,6 +8,16 @@ use Fh\Git\Deployment\Deploy;
 interface DeploymentStrategyInterface {
 
     /**
+     * Performs any action that should be performed
+     * before any deployment work begins. For example,
+     * executing a pre-deployment script that backs
+     * up your database.
+     * @param  Deploy  $deploy
+     * @return boolean true if successful, false otherwise
+     */
+    public function preDeployment(Deploy $deploy);
+
+    /**
      * Performs the deployment into the work area.
      * Most of the time, this just means that
      * git checkout branchname is performed.

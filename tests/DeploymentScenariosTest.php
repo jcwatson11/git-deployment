@@ -34,8 +34,16 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
           ->andReturn("\n");
         $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. remote | egrep "^beta$" | tail -1')
           ->andReturn('beta');
+        $d->expectCommand('[ -f /var/www/test.fh.org/./pre-deploy.sh ] && ls /var/www/test.fh.org/./pre-deploy.sh')
+          ->andReturn('pre-deploy.sh');
         $d->expectCommand('[ -f /var/www/test.fh.org/./deploy.sh ] && ls /var/www/test.fh.org/./deploy.sh')
           ->andReturn('deploy.sh');
+        $d->expectCommand('cd /var/www/test.fh.org')
+          ->andReturn("\n");
+        $d->expectCommand('pwd')
+          ->andReturn("/var/www/test.fh.org");
+        $d->expectCommand('./pre-deploy.sh')
+          ->andReturn("\n");
         $d->expectCommand('cd /var/www/test.fh.org')
           ->andReturn("\n");
         $d->expectCommand('pwd')
@@ -52,6 +60,18 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
         $expected .= "Checking to make sure the beta remote exists in the target work area.\n";
         $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. remote | egrep \"^beta$\" | tail -1\n";
         $expected .= "It exists. So we're ok.\n";
+        $expected .= "Following strategy: Fh\Git\Deployment\Strategies\DefaultDeploymentStrategy\n";
+        $expected .= "Running pre-deployment script in work area.\n";
+        $expected .= "command: [ -f /var/www/test.fh.org/./pre-deploy.sh ] && ls /var/www/test.fh.org/./pre-deploy.sh\n";
+        $expected .= "command: cd /var/www/test.fh.org\n";
+        $expected .= "\n";
+        $expected .= "\n";
+        $expected .= "command: pwd\n";
+        $expected .= "Current working directory is: /var/www/test.fh.org\n";
+        $expected .= "Running pre-deployment script.\n";
+        $expected .= "command: ./pre-deploy.sh\n";
+        $expected .= "\n";
+        $expected .= "\n";
         $expected .= "Preparing to deal with locally modified files if there are any.\n";
         $expected .= "Following strategy: Fh\Git\Deployment\Strategies\ResetLocallyModifiedFileStrategy\n";
         $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. ls-files -m\n";
@@ -68,7 +88,6 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
         $expected .= "You have pushed a tag. Only branches can be auto-tagged. Pushing a tag will simply deploy that tag to the work area.\n";
         $expected .= "No new tag will be created.\n";
         $expected .= "Deploying the tag you pushed (3.0.0) to work area /var/www/test.fh.org.\n";
-        $expected .= "Following strategy: Fh\Git\Deployment\Strategies\DefaultDeploymentStrategy\n";
         $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch beta\n";
         $expected .= "\n"; // Empty output from git command
         $expected .= "\n"; // Empty output from git command
@@ -84,7 +103,7 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
         $expected .= "\n";
         $expected .= "command: pwd\n";
         $expected .= "Current working directory is: /var/www/test.fh.org\n";
-        $expected .= "Running deployment script.\n";
+        $expected .= "Running post-deployment script.\n";
         $expected .= "command: ./deploy.sh\n";
         $expected .= "\n";
         $expected .= "\n";
@@ -123,8 +142,16 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
           ->andReturn("\n");
         $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. push origin 3.0.0-beta.3')
           ->andReturn("\n");
+        $d->expectCommand('[ -f /var/www/test.fh.org/./pre-deploy.sh ] && ls /var/www/test.fh.org/./pre-deploy.sh')
+          ->andReturn('pre-deploy.sh');
         $d->expectCommand('[ -f /var/www/test.fh.org/./deploy.sh ] && ls /var/www/test.fh.org/./deploy.sh')
           ->andReturn('deploy.sh');
+        $d->expectCommand('cd /var/www/test.fh.org')
+          ->andReturn("\n");
+        $d->expectCommand('pwd')
+          ->andReturn("/var/www/test.fh.org");
+        $d->expectCommand('./pre-deploy.sh')
+          ->andReturn("\n");
         $d->expectCommand('cd /var/www/test.fh.org')
           ->andReturn("\n");
         $d->expectCommand('pwd')
@@ -141,6 +168,18 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
         $expected .= "Checking to make sure the beta remote exists in the target work area.\n";
         $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. remote | egrep \"^beta$\" | tail -1\n";
         $expected .= "It exists. So we're ok.\n";
+        $expected .= "Following strategy: Fh\Git\Deployment\Strategies\DefaultDeploymentStrategy\n";
+        $expected .= "Running pre-deployment script in work area.\n";
+        $expected .= "command: [ -f /var/www/test.fh.org/./pre-deploy.sh ] && ls /var/www/test.fh.org/./pre-deploy.sh\n";
+        $expected .= "command: cd /var/www/test.fh.org\n";
+        $expected .= "\n";
+        $expected .= "\n";
+        $expected .= "command: pwd\n";
+        $expected .= "Current working directory is: /var/www/test.fh.org\n";
+        $expected .= "Running pre-deployment script.\n";
+        $expected .= "command: ./pre-deploy.sh\n";
+        $expected .= "\n";
+        $expected .= "\n";
         $expected .= "Preparing to deal with locally modified files if there are any.\n";
         $expected .= "Following strategy: Fh\Git\Deployment\Strategies\ResetLocallyModifiedFileStrategy\n";
         $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. ls-files -m\n";
@@ -158,7 +197,6 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
         $expected .= "Previous latest tag was 3.0.0-beta.2\n";
         $expected .= "Next tag to be used: 3.0.0-beta.3\n";
         $expected .= "Deploying the branch you pushed (3.0) to work area /var/www/test.fh.org.\n";
-        $expected .= "Following strategy: Fh\Git\Deployment\Strategies\DefaultDeploymentStrategy\n";
         $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch beta\n";
         $expected .= "\n"; // Empty output from git command
         $expected .= "\n"; // Empty output from git command
@@ -194,7 +232,7 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
         $expected .= "\n";
         $expected .= "command: pwd\n";
         $expected .= "Current working directory is: /var/www/test.fh.org\n";
-        $expected .= "Running deployment script.\n";
+        $expected .= "Running post-deployment script.\n";
         $expected .= "command: ./deploy.sh\n";
         $expected .= "\n";
         $expected .= "\n";

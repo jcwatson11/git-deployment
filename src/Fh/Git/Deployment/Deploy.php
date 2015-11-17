@@ -203,6 +203,16 @@ class Deploy extends CommandRunner {
             $this->out("It exists. So we're ok.");
         }
 
+        $deployStrategy = $this->getDeploymentStrategy();
+        // Now do pre-deployment processing, which
+        // might include executing a pre-deployment script
+        // that backs up a database.
+        if(!$deployStrategy->preDeployment($this)) {
+            $this->out("DeploymentStrategy::preDeployment() told me to abort. Aborting deployment.");
+            exit;
+        }
+        
+
         // Deal with locally modified files.
         $this->out("Preparing to deal with locally modified files if there are any.");
         $LMFStrategy = $this->getLocallyModifiedFileStrategy();
@@ -224,7 +234,6 @@ class Deploy extends CommandRunner {
         // Now deploy the version to the work area
         $reftype = $this->isBranch($this->ref) ? "branch":"tag";
         $this->out("Deploying the $reftype you pushed ({$this->baseref}) to work area {$this->config['target']}.");
-        $deployStrategy = $this->getDeploymentStrategy();
         if(!$deployStrategy->deploy($this,$version)) {
             $this->out("DeploymentStrategy::deploy() told me to abort. Aborting deployment.");
             exit;

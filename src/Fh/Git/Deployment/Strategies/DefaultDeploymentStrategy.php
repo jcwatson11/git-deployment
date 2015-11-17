@@ -9,6 +9,45 @@ use Fh\Git\Deployment\Strategies\Interfaces\DeploymentStrategyInterface;
 class DefaultDeploymentStrategy implements DeploymentStrategyInterface {
 
     /**
+     * Returns the full file path of the deployment
+     * script configured.
+     * @return string full path to deployment script
+     */
+    public function getPreDeploymentScriptPath(Deploy $deploy) {
+        $deployScript = $deploy->config['pre_deployment_script'];
+        if(!$deployScript) return '';
+        $target = $deploy->config['target'];
+        return $target.'/'.$deployScript;
+    }
+
+    /**
+     * Performs any action that should be performed
+     * before any deployment work begins. For example,
+     * executing a pre-deployment script that backs
+     * up your database.
+     * @param  Deploy  $deploy
+     * @return boolean true if successful, false otherwise
+     */
+    public function preDeployment(Deploy $deploy)
+    {
+        // Run deployment scripts
+        $deploy->out("Running pre-deployment script in work area.");
+        $target = $deploy->config['target'];
+        $fullPath = $this->getPreDeploymentScriptPath($deploy);
+        $deployScript = $deploy->config['pre_deployment_script'];
+        if($fullPath && $this->fileExists($deploy, $fullPath)) {
+            $deploy->out($deploy->command("cd $target"));
+            $pwd = $deploy->command('pwd');
+            $deploy->out("Current working directory is: $pwd");
+            $deploy->out("Running pre-deployment script.");
+            $deploy->out($deploy->command($deployScript));
+        } else {
+            $deploy->out("No pre-deployment script found in work area. Skipping pre-deployment.");
+        }
+        return true;
+    }
+
+    /**
      * Performs the deployment itself. This usually means
      * simply checking out the pushed ref in the target
      * work area and nothing else.
@@ -48,14 +87,16 @@ class DefaultDeploymentStrategy implements DeploymentStrategyInterface {
         // Run deployment scripts
         $deploy->out("Running post-deployment script in work area.");
         $target = $deploy->config['target'];
-        $fullPath = $this->getDeploymentScriptPath($deploy);
+        $fullPath = $this->getPostDeploymentScriptPath($deploy);
         $deployScript = $deploy->config['post_deployment_script'];
         if($fullPath && $this->fileExists($deploy, $fullPath)) {
             $deploy->out($deploy->command("cd $target"));
             $pwd = $deploy->command('pwd');
             $deploy->out("Current working directory is: $pwd");
-            $deploy->out("Running deployment script.");
+            $deploy->out("Running post-deployment script.");
             $deploy->out($deploy->command($deployScript));
+        } else {
+            $deploy->out("No post-deployment script found in work area. Skipping post-deployment.");
         }
         return true;
     }
@@ -65,7 +106,7 @@ class DefaultDeploymentStrategy implements DeploymentStrategyInterface {
      * script configured.
      * @return string full path to deployment script
      */
-    public function getDeploymentScriptPath(Deploy $deploy) {
+    public function getPostDeploymentScriptPath(Deploy $deploy) {
         $deployScript = $deploy->config['post_deployment_script'];
         if(!$deployScript) return '';
         $target = $deploy->config['target'];

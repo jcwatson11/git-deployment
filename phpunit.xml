@@ -24,6 +24,7 @@
         <env name="LOCALLY_MODIFIED_FILE_STRATEGY" value="Fh\Git\Deployment\Strategies\ResetLocallyModifiedFileStrategy" />
         <env name="TAG_STRATEGY" value="Fh\Git\Deployment\Strategies\AutoIncrementingTagStrategy" />
         <env name="DEPLOYMENT_STRATEGY" value="Fh\Git\Deployment\Strategies\DefaultDeploymentStrategy" />
+        <env name="PRE_DEPLOYMENT_SCRIPT" value="./pre-deploy.sh" />
         <env name="POST_DEPLOYMENT_SCRIPT" value="./deploy.sh" />
     </php>
 </phpunit>

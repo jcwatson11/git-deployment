@@ -97,7 +97,32 @@ class DefaultDeploymentStrategyTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($expected,$out);
     }
 
-    public function test_it_returns_the_deployment_script_path_and_knows_when_it_exists() {
+    public function test_it_returns_the_pre_deployment_script_path_and_knows_when_it_exists() {
+        $d = $this->newDeploy();
+
+        $d->expectCommand('[ -f /var/www/test.fh.org/./pre-deploy.sh ] && ls /var/www/test.fh.org/./pre-deploy.sh')
+          ->andReturn('pre-deploy.sh');
+        $d->expectCommand('[ -f /var/www/test.fh.org/./pre-deploy.sh ] && ls /var/www/test.fh.org/./pre-deploy.sh')
+          ->andReturn('');
+
+        ob_start();
+        $ds = $d->getDeploymentStrategy();
+        $path = $ds->getPreDeploymentScriptPath($d);
+        $result = $ds->fileExists($d,$path);
+        $second_result = $ds->fileExists($d,$path);
+        $out = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertEquals("/var/www/test.fh.org/./pre-deploy.sh",$path);
+        $this->assertEquals(TRUE,$result);
+        $this->assertEquals(FALSE,$second_result);
+
+        $expected = "Following strategy: Fh\Git\Deployment\Strategies\DefaultDeploymentStrategy\n";
+        $expected .= "command: [ -f /var/www/test.fh.org/./pre-deploy.sh ] && ls /var/www/test.fh.org/./pre-deploy.sh\n";
+        $expected .= "command: [ -f /var/www/test.fh.org/./pre-deploy.sh ] && ls /var/www/test.fh.org/./pre-deploy.sh\n";
+        $this->assertEquals($expected,$out);
+    }
+    public function test_it_returns_the_post_deployment_script_path_and_knows_when_it_exists() {
         $d = $this->newDeploy();
 
         $d->expectCommand('[ -f /var/www/test.fh.org/./deploy.sh ] && ls /var/www/test.fh.org/./deploy.sh')
@@ -107,7 +132,7 @@ class DefaultDeploymentStrategyTest extends PHPUnit_Framework_TestCase {
 
         ob_start();
         $ds = $d->getDeploymentStrategy();
-        $path = $ds->getDeploymentScriptPath($d);
+        $path = $ds->getPostDeploymentScriptPath($d);
         $result = $ds->fileExists($d,$path);
         $second_result = $ds->fileExists($d,$path);
         $out = ob_get_contents();
