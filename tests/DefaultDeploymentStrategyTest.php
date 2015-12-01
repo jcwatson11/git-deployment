@@ -19,17 +19,17 @@ class DefaultDeploymentStrategyTest extends PHPUnit_Framework_TestCase {
     public function test_it_deploys_a_branch_properly() {
         $d = $this->newDeploy();
 
-        $d->expectCommand("git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. tag | grep -E -i \"^3.0\.[0-9]\.[0-9]+-beta\.[0-9]+\$\" | sort -V | tail -1")
+        $d->expectCommand("git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. tag | grep -E -i \"^3.0\.[0-9]+-beta\.[0-9]+\$\" | sort -V | tail -1")
           ->andReturn("3.0.0-beta.42");
         $d->expectCommand("git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. branch -D 3.0")
+          ->andReturn("\n");
+        $d->expectCommand("git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch beta")
           ->andReturn("\n");
         $d->expectCommand("git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. checkout beta/3.0")
           ->andReturn("\n");
         $d->expectCommand("git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. checkout -b 3.0")
           ->andReturn("\n");
         $d->expectCommand("git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. push origin 3.0")
-          ->andReturn("\n");
-        $d->expectCommand("git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. fetch beta")
           ->andReturn("\n");
 
         ob_start();
@@ -41,7 +41,7 @@ class DefaultDeploymentStrategyTest extends PHPUnit_Framework_TestCase {
         ob_end_clean();
 
         $expected = "Following strategy: Fh\Git\Deployment\Strategies\AutoIncrementingTagStrategy\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. tag | grep -E -i \"^3.0\.[0-9]\.[0-9]+-beta\.[0-9]+\$\" | sort -V | tail -1\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. tag | grep -E -i \"^3.0\.[0-9]+-beta\.[0-9]+\$\" | sort -V | tail -1\n";
         $expected .= "Previous latest tag was 3.0.0-beta.42\n";
         $expected .= "Next tag to be used: 3.0.0-beta.43\n";
         $expected .= "Following strategy: Fh\Git\Deployment\Strategies\DefaultDeploymentStrategy\n";

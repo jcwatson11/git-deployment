@@ -38,17 +38,9 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
           ->andReturn('pre-deploy.sh');
         $d->expectCommand('[ -f /var/www/test.fh.org/./deploy.sh ] && ls /var/www/test.fh.org/./deploy.sh')
           ->andReturn('deploy.sh');
-        $d->expectCommand('cd /var/www/test.fh.org')
+        $d->expectCommand('cd /var/www/test.fh.org && sudo ./pre-deploy.sh')
           ->andReturn("\n");
-        $d->expectCommand('pwd')
-          ->andReturn("/var/www/test.fh.org");
-        $d->expectCommand('./pre-deploy.sh')
-          ->andReturn("\n");
-        $d->expectCommand('cd /var/www/test.fh.org')
-          ->andReturn("\n");
-        $d->expectCommand('pwd')
-          ->andReturn("/var/www/test.fh.org");
-        $d->expectCommand('./deploy.sh')
+        $d->expectCommand('cd /var/www/test.fh.org && sudo ./deploy.sh')
           ->andReturn("\n");
         ob_start();
         echo $d->main();
@@ -63,13 +55,8 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
         $expected .= "Following strategy: Fh\Git\Deployment\Strategies\DefaultDeploymentStrategy\n";
         $expected .= "Running pre-deployment script in work area.\n";
         $expected .= "command: [ -f /var/www/test.fh.org/./pre-deploy.sh ] && ls /var/www/test.fh.org/./pre-deploy.sh\n";
-        $expected .= "command: cd /var/www/test.fh.org\n";
-        $expected .= "\n";
-        $expected .= "\n";
-        $expected .= "command: pwd\n";
-        $expected .= "Current working directory is: /var/www/test.fh.org\n";
         $expected .= "Running pre-deployment script.\n";
-        $expected .= "command: ./pre-deploy.sh\n";
+        $expected .= "command: cd /var/www/test.fh.org && sudo ./pre-deploy.sh\n";
         $expected .= "\n";
         $expected .= "\n";
         $expected .= "Preparing to deal with locally modified files if there are any.\n";
@@ -98,13 +85,8 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
         $expected .= "No new tag will be created because you are pushing a tag.\n";
         $expected .= "Running post-deployment script in work area.\n";
         $expected .= "command: [ -f /var/www/test.fh.org/./deploy.sh ] && ls /var/www/test.fh.org/./deploy.sh\n";
-        $expected .= "command: cd /var/www/test.fh.org\n";
-        $expected .= "\n";
-        $expected .= "\n";
-        $expected .= "command: pwd\n";
-        $expected .= "Current working directory is: /var/www/test.fh.org\n";
         $expected .= "Running post-deployment script.\n";
-        $expected .= "command: ./deploy.sh\n";
+        $expected .= "command: cd /var/www/test.fh.org && sudo ./deploy.sh\n";
         $expected .= "\n";
         $expected .= "\n";
         $expected .= "DEPLOYMENT SUCCESSFUL!!\n";
@@ -126,7 +108,7 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
           ->andReturn("");
         $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. remote | egrep "^beta$" | tail -1')
           ->andReturn('beta');
-        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. tag | grep -E -i "^3.0\.[0-9]\.[0-9]+-beta\.[0-9]+$" | sort -V | tail -1')
+        $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. tag | grep -E -i "^3.0\.[0-9]+-beta\.[0-9]+$" | sort -V | tail -1')
           ->andReturn('3.0.0-beta.2');
         $d->expectCommand('git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. branch -D 3.0')
           ->andReturn("\n");
@@ -146,17 +128,9 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
           ->andReturn('pre-deploy.sh');
         $d->expectCommand('[ -f /var/www/test.fh.org/./deploy.sh ] && ls /var/www/test.fh.org/./deploy.sh')
           ->andReturn('deploy.sh');
-        $d->expectCommand('cd /var/www/test.fh.org')
+        $d->expectCommand('cd /var/www/test.fh.org && sudo ./pre-deploy.sh')
           ->andReturn("\n");
-        $d->expectCommand('pwd')
-          ->andReturn("/var/www/test.fh.org");
-        $d->expectCommand('./pre-deploy.sh')
-          ->andReturn("\n");
-        $d->expectCommand('cd /var/www/test.fh.org')
-          ->andReturn("\n");
-        $d->expectCommand('pwd')
-          ->andReturn("/var/www/test.fh.org");
-        $d->expectCommand('./deploy.sh')
+        $d->expectCommand('cd /var/www/test.fh.org && sudo ./deploy.sh')
           ->andReturn("\n");
         ob_start();
         echo $d->main();
@@ -171,13 +145,8 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
         $expected .= "Following strategy: Fh\Git\Deployment\Strategies\DefaultDeploymentStrategy\n";
         $expected .= "Running pre-deployment script in work area.\n";
         $expected .= "command: [ -f /var/www/test.fh.org/./pre-deploy.sh ] && ls /var/www/test.fh.org/./pre-deploy.sh\n";
-        $expected .= "command: cd /var/www/test.fh.org\n";
-        $expected .= "\n";
-        $expected .= "\n";
-        $expected .= "command: pwd\n";
-        $expected .= "Current working directory is: /var/www/test.fh.org\n";
         $expected .= "Running pre-deployment script.\n";
-        $expected .= "command: ./pre-deploy.sh\n";
+        $expected .= "command: cd /var/www/test.fh.org && sudo ./pre-deploy.sh\n";
         $expected .= "\n";
         $expected .= "\n";
         $expected .= "Preparing to deal with locally modified files if there are any.\n";
@@ -193,7 +162,7 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
         $expected .= "\n"; // Empty output from git command
         $expected .= "Preparing tag strategy.\n";
         $expected .= "Following strategy: Fh\Git\Deployment\Strategies\AutoIncrementingTagStrategy\n";
-        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. tag | grep -E -i \"^3.0\.[0-9]\.[0-9]+-beta\.[0-9]+\$\" | sort -V | tail -1\n";
+        $expected .= "command: git --git-dir /var/www/test.fh.org/.git --work-tree /var/www/test.fh.org/. tag | grep -E -i \"^3.0\.[0-9]+-beta\.[0-9]+\$\" | sort -V | tail -1\n";
         $expected .= "Previous latest tag was 3.0.0-beta.2\n";
         $expected .= "Next tag to be used: 3.0.0-beta.3\n";
         $expected .= "Deploying the branch you pushed (3.0) to work area /var/www/test.fh.org.\n";
@@ -227,13 +196,8 @@ class DeploymentScenariosTest extends PHPUnit_Framework_TestCase {
         $expected .= "\n";
         $expected .= "Running post-deployment script in work area.\n";
         $expected .= "command: [ -f /var/www/test.fh.org/./deploy.sh ] && ls /var/www/test.fh.org/./deploy.sh\n";
-        $expected .= "command: cd /var/www/test.fh.org\n";
-        $expected .= "\n";
-        $expected .= "\n";
-        $expected .= "command: pwd\n";
-        $expected .= "Current working directory is: /var/www/test.fh.org\n";
         $expected .= "Running post-deployment script.\n";
-        $expected .= "command: ./deploy.sh\n";
+        $expected .= "command: cd /var/www/test.fh.org && sudo ./deploy.sh\n";
         $expected .= "\n";
         $expected .= "\n";
         $expected .= "DEPLOYMENT SUCCESSFUL!!\n";

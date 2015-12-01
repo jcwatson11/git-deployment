@@ -36,11 +36,8 @@ class DefaultDeploymentStrategy implements DeploymentStrategyInterface {
         $fullPath = $this->getPreDeploymentScriptPath($deploy);
         $deployScript = $deploy->config['pre_deployment_script'];
         if($fullPath && $this->fileExists($deploy, $fullPath)) {
-            $deploy->out($deploy->command("cd $target"));
-            $pwd = $deploy->command('pwd');
-            $deploy->out("Current working directory is: $pwd");
             $deploy->out("Running pre-deployment script.");
-            $deploy->out($deploy->command($deployScript));
+            $deploy->out($deploy->command("cd $target && sudo " . $deployScript));
         } else {
             $deploy->out("No pre-deployment script found in work area. Skipping pre-deployment.");
         }
@@ -57,7 +54,7 @@ class DefaultDeploymentStrategy implements DeploymentStrategyInterface {
      */
     public function deploy(Deploy $deploy, Version $version) {
         $remote = $deploy->config['deployment_remote_name'];
-        $deploy->out($deploy->git("fetch beta"));
+        $deploy->out($deploy->git("fetch $remote"));
         if($deploy->isBranch($deploy->ref)) {
             $deploy->out("Deleting local copy of your branch just to avoid any potential merge conflicts.");
             $deploy->out($deploy->git("branch -D {$deploy->baseref}"));
@@ -90,11 +87,8 @@ class DefaultDeploymentStrategy implements DeploymentStrategyInterface {
         $fullPath = $this->getPostDeploymentScriptPath($deploy);
         $deployScript = $deploy->config['post_deployment_script'];
         if($fullPath && $this->fileExists($deploy, $fullPath)) {
-            $deploy->out($deploy->command("cd $target"));
-            $pwd = $deploy->command('pwd');
-            $deploy->out("Current working directory is: $pwd");
             $deploy->out("Running post-deployment script.");
-            $deploy->out($deploy->command($deployScript));
+            $deploy->out($deploy->command("cd $target && sudo " . $deployScript));
         } else {
             $deploy->out("No post-deployment script found in work area. Skipping post-deployment.");
         }

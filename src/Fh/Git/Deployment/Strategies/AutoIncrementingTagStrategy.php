@@ -55,7 +55,7 @@ class AutoIncrementingTagStrategy implements TagStrategyInterface {
     public function getLatestTag(Deploy $deploy) {
         $remote = $deploy->config['deployment_remote_name'];
         $preRelease = ($remote != 'production') ? "-{$remote}\.[0-9]+":'';
-        $latestTag = $deploy->git("tag | grep -E -i \"^{$deploy->baseref}\.[0-9]\.[0-9]+$preRelease$\" | sort -V | tail -1");
+        $latestTag = $deploy->git("tag | grep -E -i \"^{$deploy->baseref}\.[0-9]+$preRelease$\" | sort -V | tail -1");
         if(!$latestTag) {
             $preReleaseSuffix = ($remote != 'production') ? "-$remote.0":'';
             $latestTag = $deploy->baseref . ".0" . $preReleaseSuffix;
