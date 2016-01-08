@@ -127,9 +127,9 @@ $ sudo mv git-deployment.phar /usr/local/bin/git-deployment
 
 ## Bringing it all together
 
-If you are making customizatoins regularly, once you understand how this process works, it makes sense to create something like the [fh/git-hooks](https://bitbucket.org/jon_watson/fh-git-hooks) project. This project provides an example post-receive hook and a Makefile for easily installation and deployment of your modified git-deployment phar. That way you can make changes in both your git-deployment project and your post-receive hook and easily test and deploy them to your gitolite repository hooks directory for further testing.
+If you are making customizatoins regularly, once you understand how this process works, it makes sense to create something like the [fh/git-hooks](https://bitbucket.org/fhcode/fh-git-hooks) project. This project provides an example post-receive hook and a Makefile for easily installation and deployment of your modified git-deployment phar. That way you can make changes in both your git-deployment project and your post-receive hook and easily test and deploy them to your gitolite repository hooks directory for further testing.
 
-See the [fh/git-hooks](https://bitbucket.org/jon_watson/fh-git-hooks) project for further instructions on how to use it.
+See the [fh/git-hooks](https://bitbucket.org/fhcode/fh-git-hooks) project for further instructions on how to use it.
 
 This allows you quick, easy access to make changes, run unit tests, and re-deploy the git-deployment.phar and post-receive hook to your system with your recent customizations.
 
