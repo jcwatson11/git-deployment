@@ -42,9 +42,7 @@ $ sudo mv phar-composer.phar /usr/local/bin/phar-composer
 ```
 2. Install git-deployment globally
 ```sh
-$ cd /path/to/work-area/git-deployment
-$ mkdir build
-$ phar-composer build . git-deployment.phar
+$ phar-composer build fh/git-deployment
 $ chmod ugo+x git-deployment.phar
 $ sudo mv git-deployment.phar /usr/local/bin/git-deployment
 ```
